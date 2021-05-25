@@ -18,5 +18,15 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='main_url'),
+
     path('user/', include('userapp.urls')),
+
+    re_path(r'order/([0-9]+)/(pay|cancel|accept|info)/', views.order_edit_views, name='order_edit_url'),
+    re_path(r'order/([0-9]+)/', views.order_views, name='order_url'),
+    path('order/', views.order_list_views, name='order_list_url'),
+
+    re_path(r'order_arhive/([0-9]+)/', views.order_arhive_views, name='order_arhive_url'),
+    path('order_arhive/', views.order_arhive_list_views, name='order_arhive_list_url'),
+
+    path('car/', views.car_views, name='car_add_url'),
 ]

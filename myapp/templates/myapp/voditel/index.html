@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load tags_jinja %}
+{% block title %}Заказы{% endblock %}
+
+{% block content %}
+    <div class="row min-vh-100 flex-column flex-md-row align-items-center">
+        <div class="col-md-4"></div>
+        <div class="col-12 col-md-4 p-0 flex-shrink-1">
+            {% if arguments.error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ arguments.error }}
+                </div>
+            {% endif %}
+
+            <div class="card">
+                <div class="card-body">
+                    {% if arguments.order_list|cheak_count_list > 0 %}
+                        {% for order in arguments.order_list %}
+                            <button type="button"
+                                    class="btn btn-{% if order.status_id.id == 3 %}warning{% elif order.status_id.id == 4 %}success{% endif %} btn-block"
+                                    role="button"
+                                    onclick="window.location.href = '{% url 'order_url' order.id %}'">
+                                Заказ № {{ order.id }}
+                            </button>
+                        {% endfor %}
+                    {% else %}
+                        <h4>Заказы не найдены!</h4>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

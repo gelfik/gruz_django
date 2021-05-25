@@ -1,5 +1,6 @@
 <!doctype html>
 {% load static %}
+{% load tags_jinja %}
 <html lang="ru">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -35,6 +36,11 @@
     <div class="collapse navbar-collapse float-right justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
             {% if user.is_authenticated %}
+                {% if user|has_group:"Диспетчер" %}
+                    <li class="nav-item active ">
+                        <a class="dropdown-item" href="{% url 'car_add_url' %}">Добавить автотранспорт</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item active ">
                     <a class="dropdown-item" href="{% url 'logout_url' %}">Выйти</a>
                 </li>

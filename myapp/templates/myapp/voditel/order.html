@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block title %}Заказ{% if arguments.order is not None %} №{{ arguments.order.id }}{% endif %}{% endblock %}
+{% block content %}
+    <div class="row min-vh-100 flex-column flex-md-row align-items-center">
+        <div class="col-md-4"></div>
+        <div class="col-12 col-md-4 p-0 flex-shrink-1">
+            {% if arguments.error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ arguments.error }}
+                </div>
+            {% endif %}
+            {% if arguments.order is not None %}
+                <div class="card">
+                    <div class="card-body">
+                        <button type="button" class="btn btn-light btn-sm mb-3 float-right" role="button"
+                                onclick="window.location.href = '{% url 'main_url' %}'">
+                            Назад
+                        </button>
+                        <h6 class="card-subtitle mb-2 text-muted">Клиент:</h6>
+                        <p class="card-text font-weight-bold">{{ arguments.order.user_id.get_full_name }}</p>
+                        <h6 class="card-subtitle mb-2 text-muted">Начальный пункт:</h6>
+                        <p class="card-text font-weight-bold">{{ arguments.order.start_point }}</p>
+                        <hr>
+                        <h6 class="card-subtitle mb-2 text-muted">Конечный пункт:</h6>
+                        <p class="card-text font-weight-bold">{{ arguments.order.finish_point }}</p>
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <h6 class="card-subtitle mb-2 text-muted">Заказ №</h6>
+                                <p class="card-text font-weight-bold">{{ arguments.order.id }}</p>
+                            </div>
+                            <div class="col">
+                                <h6 class="card-subtitle mb-2 text-muted">Статус:</h6>
+                                <p class="card-text font-weight-bold">{{ arguments.order.status_id }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <h6 class="card-subtitle mb-2 text-muted">Тип груза:</h6>
+                        <p class="card-text font-weight-bold">{{ arguments.order.gruz_type_id }}</p>
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <h6 class="card-subtitle mb-2 text-muted">Длинна:</h6>
+                                <p class="card-text font-weight-bold">
+                                    {{ arguments.order.lenght }}{{ arguments.order.measure_size_id }}</p>
+                            </div>
+                            <div class="col">
+                                <h6 class="card-subtitle mb-2 text-muted">Высота:</h6>
+                                <p class="card-text font-weight-bold">
+                                    {{ arguments.order.height }}{{ arguments.order.measure_size_id }}</p>
+                            </div>
+                            <div class="col">
+                                <h6 class="card-subtitle mb-2 text-muted">Ширина:</h6>
+                                <p class="card-text font-weight-bold">
+                                    {{ arguments.order.width }}{{ arguments.order.measure_size_id }}</p>
+                            </div>
+                            <div class="col">
+                                <h6 class="card-subtitle mb-2 text-muted">Вес:</h6>
+                                <p class="card-text font-weight-bold">
+                                    {{ arguments.order.ves }}{{ arguments.order.measure_ves_id }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <h6 class="card-subtitle mb-2 text-muted">Время заказа:</h6>
+                                <p class="card-text font-weight-bold">{{ arguments.order.time_create }}</p>
+                            </div>
+                            <div class="col">
+                                <h6 class="card-subtitle mb-2 text-muted">Расчетное время исполнения:</h6>
+                                <p class="card-text font-weight-bold">
+                                    {% if arguments.order.time_execution is not None %}
+                                        {{ arguments.order.time_execution }}
+                                    {% else %}
+                                        Не определено
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <h6 class="card-subtitle mb-2 text-muted">Транспортное средство:</h6>
+                                <p class="card-text font-weight-bold">
+                                    {% if arguments.order.car_id is not None %}
+                                        {{ arguments.order.car_id.marka }}, {{ arguments.order.car_id.gos_number }}
+                                    {% else %}
+                                        Не определено
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col">
+                                <h6 class="card-subtitle mb-2 text-muted">Водитель:</h6>
+                                <p class="card-text font-weight-bold">
+                                    {% if arguments.order.voditel_id is not None %}
+                                        {{ arguments.order.voditel_id.get_full_name }}
+                                    {% else %}
+                                        Не определен
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <h6 class="card-subtitle mb-2 text-muted">Стоимость:</h6>
+                        <p class="card-text font-weight-bold">
+                            {% if arguments.order.sum != 0 %}
+                                {{ arguments.order.sum }} руб
+                            {% else %}
+                                Не определена
+                            {% endif %}
+                        </p>
+                        {% if arguments.order.status_id.pk == 3 %}
+                            <hr>
+                            <button type="button" class="btn btn-light btn-block" role="button"
+                                    onclick="window.location.href = '{% url 'order_edit_url' arguments.order.id 'info' %}'">
+                                Принять
+                            </button>
+
+                        {% elif arguments.order.status_id.pk == 4 %}
+                            <hr>
+                            <button type="button" class="btn btn-light btn-block" role="button"
+                                    onclick="window.location.href = '{% url 'order_edit_url' arguments.order.id 'accept' %}'">
+                                Подтвердить исполнение
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

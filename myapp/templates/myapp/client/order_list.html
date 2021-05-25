@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load tags_jinja %}
+{% block title %}Заказы{% endblock %}
+
+{% block content %}
+    <div class="row min-vh-100 flex-column flex-md-row align-items-center">
+        <div class="col-md-4"></div>
+        <div class="col-12 col-md-4 p-0 flex-shrink-1">
+            {% if arguments.error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ arguments.error }}
+                </div>
+            {% endif %}
+
+            <div class="card">
+                <div class="card-body">
+                    <button type="button" class="btn btn-light btn-sm mb-3 float-right" role="button"
+                            onclick="window.location.href = '{% url 'main_url' %}'">
+                        Назад
+                    </button>
+                    {% if arguments.order_list|cheak_count_list > 0 %}
+                        {% url 'order_list_url' as the_url %}
+                        {% for order in arguments.order_list %}
+                            {% if request.path == the_url %}
+                                <button type="button" class="btn btn-light btn-block" role="button"
+                                        onclick="window.location.href = '{% url 'order_url' order.id %}'">
+                                    Заказ № {{ order.id }}
+                                </button>
+                            {% else %}
+                                <button type="button" class="btn btn-light btn-block" role="button"
+                                        onclick="window.location.href = '{% url 'order_arhive_url' order.id %}'">
+                                    Заказ № {{ order.id }}
+                                </button>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <h4>Заказы не найдены!</h4>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

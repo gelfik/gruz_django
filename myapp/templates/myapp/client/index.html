@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block title %}Меню{% endblock %}
+
+{% block content %}
+    <div class="row min-vh-100 flex-column flex-md-row align-items-center">
+        <div class="col-md-4"></div>
+        <div class="col-12 col-md-4 p-0 flex-shrink-1">
+            {% if arguments.error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ arguments.error }}
+                </div>
+            {% endif %}
+            <button type="button" class="btn btn-light btn-block" role="button" data-toggle="modal"
+                    data-target="#AddModal">
+                Новый заказ
+            </button>
+            <button type="button" class="btn btn-light btn-block" role="button" onclick="window.location.href = '{% url 'order_list_url'  %}'">
+                Текущие заказы
+            </button>
+            <div class="pt-3">
+                <button type="button" class="btn btn-light btn-block" role="button"  onclick="window.location.href = '{% url 'order_arhive_list_url'  %}'">
+                    История заказов
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {% if arguments.form is not None %}
+        <!-- Add Modal -->
+        <div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="AddModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog row min-vh-100 flex-column flex-md-row align-items-center" role="document">
+                <div class="modal-content" style="background-color:#e8eaec">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="AddModalLabel">Добавление нового заказа</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="post" action="{% url 'main_url' %}">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            {% csrf_token %}
+                            {% for field in arguments.form %}
+                                {% if field.name in 'lenght' or field.name in 'height' or field.name in 'width' or field.name in 'ves' %}
+                                    {% if forloop.counter == 2 %}
+                                        <div class="form-row">
+                                    {% endif %}
+                                <div class="form-group col-md-3">
+                                    {% if field.errors %}
+                                        <div class="alert alert-danger">
+                                            {{ field.errors }}
+                                        </div>
+                                    {% endif %}
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field }}
+                                </div>
+                                {% if forloop.counter == 5 %}
+                                    </div>
+                                {% endif %}
+                                {% elif field.name in 'measure_size_id' or field.name in 'measure_ves_id' %}
+                                    {% if forloop.counter == 6 %}
+                                        <div class="form-row">
+                                    {% endif %}
+                                <div class="form-group col-md-6">
+                                    {% if field.errors %}
+                                        <div class="alert alert-danger">
+                                            {{ field.errors }}
+                                        </div>
+                                    {% endif %}
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field }}
+                                </div>
+                                {% if forloop.counter == 7 %}
+                                    </div>
+                                {% endif %}
+
+                                {% else %}
+                                    <div class="form-group row">
+                                        {% if field.errors %}
+                                            <div class="alert alert-danger">
+                                                {{ field.errors }}
+                                            </div>
+                                        {% endif %}
+                                        <label for="{{ field.id_for_label }}"
+                                               class="col-sm-4 col-form-label">{{ field.label }}</label>
+                                        <div class="col-sm-8">
+                                            {{ field }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col">
+                                <button type="submit" class="btn btn-light btn-block">Сделать заказ</button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Закрыть
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

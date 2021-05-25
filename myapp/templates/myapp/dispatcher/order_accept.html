@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Принятие заказа{% endblock %}
+
+{% block content %}
+    <div class="row min-vh-100 flex-column flex-md-row align-items-center">
+        <div class="col-md-4"></div>
+        <div class="col-12 col-md-4 p-0 flex-shrink-1">
+            {% if arguments.error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ arguments.error }}
+                </div>
+            {% endif %}
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text font-weight-bold">Заказ № {{ arguments.order.id }}</p>
+                    <form method="post" action="{% url 'order_edit_url' arguments.order.id 'accept' %}">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            {% csrf_token %}
+                            {% for field in arguments.form %}
+                                <div class="form-group">
+                                    {% if field.errors %}
+                                        <div class="alert alert-danger">
+                                            {{ field.errors }}
+                                        </div>
+                                    {% endif %}
+                                    {{ field.label }}
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col">
+                                <button type="submit" class="btn btn-light btn-block">Подтвердить</button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-secondary btn-block"
+                                        onclick="window.location.href = '{% url 'order_url' arguments.order.id %}'">
+                                    Назад
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
