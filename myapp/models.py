@@ -105,3 +105,4 @@ class order_model(models.Model):
 
     def __str__(self):
         return str(self.time_create)
+
